@@ -89,19 +89,19 @@ st.caption("🎯 Schnellstart – ein Beispielszenario laden:")
 preset_col1, preset_col2, preset_col3 = st.columns(3)
 with preset_col1:
     st.button(
-        "🌉 Pratt-Brücke (Höhenprofil)", use_container_width=True,
+        "🌉 Pratt-Brücke (Höhenprofil)", width="stretch",
         on_click=apply_preset, args=("Pratt-Brückenfachwerk (Höhenprofil)", DEFAULT_MATERIAL, 1.0, 0),
         help="Klassisches Ergebnis: die optimale Tragwerkstiefe folgt dem Biegemomentenverlauf - am tiefsten in Feldmitte.",
     )
 with preset_col2:
     st.button(
-        "🗼 Antennenmast (Verjüngung)", use_container_width=True,
+        "🗼 Antennenmast (Verjüngung)", width="stretch",
         on_click=apply_preset, args=("Turmfachwerk (Verjüngungsprofil)", DEFAULT_MATERIAL, 1.0, 0),
         help="Der optimierte Mast verjüngt sich nach oben - wie ein echter Gittermast.",
     )
 with preset_col3:
     st.button(
-        "⚠️ Statisch unbestimmt (10-Stab)", use_container_width=True,
+        "⚠️ Statisch unbestimmt (10-Stab)", width="stretch",
         on_click=apply_preset, args=("10-Stab-Kragarm (Höhenprofil)", DEFAULT_MATERIAL, 1.0, 0),
         help="Hier zeigt sich der Unterschied zwischen schrittweiser Koordinatensuche und echter gemeinsamer Optimierung am deutlichsten.",
     )
@@ -126,7 +126,7 @@ with st.sidebar:
     seed_lo, seed_hi = bounds("seed_input")
     seed = st.number_input("Zufalls-Seed (Metaheuristik)", min_value=seed_lo, max_value=seed_hi, step=1, key="seed_input")
     st.button(
-        "🎲 Neuen Zufalls-Seed für die Metaheuristik", use_container_width=True, on_click=randomize_seed,
+        "🎲 Neuen Zufalls-Seed für die Metaheuristik", width="stretch", on_click=randomize_seed,
         help="Differential Evolution ist stochastisch - ein neuer Seed führt zu einer neuen Suchtrajektorie.",
     )
 
@@ -151,7 +151,7 @@ m3.metric("Anzahl freie Knoten", f"{vorlage.anzahl_frei()}")
 
 st.plotly_chart(
     struktur_figure(struktur_opt, flaechen_opt, auslastung_opt, f"{vorlage.name} – optimierte Form (gestrichelt: Standardform)", referenz=struktur_default),
-    use_container_width=True, key="struktur_main",
+    width="stretch", key="struktur_main",
 )
 
 pdf_bytes = generate_shape_report_pdf(vorlage, material, bestes, flaechen_opt, auslastung_opt)
@@ -203,14 +203,14 @@ else:
 st.markdown("---")
 
 with st.expander("🔧 Wie wir das erreichen – vollständiger Methodenvergleich", expanded=False):
-    st.plotly_chart(vergleich_balken_figure(ergebnisse), use_container_width=True, key="vergleich_balken")
+    st.plotly_chart(vergleich_balken_figure(ergebnisse), width="stretch", key="vergleich_balken")
     tabelle = pd.DataFrame(
         [
             {"Methode": name, "Masse (kg)": ergebnisse[name].masse, "Rechenzeit (s)": ergebnisse[name].rechenzeit}
             for name in METHODEN_REIHENFOLGE
         ]
     )
-    st.dataframe(tabelle, use_container_width=True, hide_index=True)
+    st.dataframe(tabelle, width="stretch", hide_index=True)
 
     tab_labels = [METHODEN_TAB_LABEL[m] for m in METHODEN_REIHENFOLGE] + ["📊 Konvergenz"]
     tabs = st.tabs(tab_labels)
@@ -229,13 +229,13 @@ with st.expander("🔧 Wie wir das erreichen – vollständiger Methodenvergleic
             tm2.metric("Rechenzeit", f"{ergebnis.rechenzeit:.2f} s")
             st.plotly_chart(
                 struktur_figure(s, f_opt, a_opt, name, referenz=struktur_default),
-                use_container_width=True, key=f"struktur_{name}",
+                width="stretch", key=f"struktur_{name}",
             )
 
     with tabs[-1]:
         meta_verlauf = ergebnisse["Metaheuristik (Differential Evolution)"].verlauf
         st.caption("Beste bisher gefundene Masse je Generation der Differential-Evolution-Suche.")
-        st.plotly_chart(konvergenz_figure(meta_verlauf), use_container_width=True, key="konvergenz")
+        st.plotly_chart(konvergenz_figure(meta_verlauf), width="stretch", key="konvergenz")
 
 st.markdown("---")
 
